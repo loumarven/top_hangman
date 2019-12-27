@@ -1,21 +1,36 @@
 require './common'
 
 class Board
-  attr_accessor :word
-  attr_reader :incorrect_guesses
+  attr_accessor :word, :correct, :incorrect
 
   def initialize
     @word = nil
-    @incorrect_guesses = []
+    @correct = nil
+    @incorrect = nil
+    @attempts = 6
   end
 
   def display
+    system('clear')
+
+    print "correct guesses: "
+    p @correct
+    puts
+
+    print "incorrect guesses: "
+    p @incorrect
+    puts
   end
 
-  def save_correct(letter)
+  def correct=(guesses)
+    @correct = guesses
   end
 
-  def save_incorrect(letter)
-    incorrect_guesses << letter
+  def incorrect=(guesses)
+    @incorrect = guesses
+  end
+
+  def update_stickman
+    @attempts = @attempts - 1
   end
 end

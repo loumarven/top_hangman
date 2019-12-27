@@ -1,4 +1,5 @@
 require './hangman'
 
-game = Hangman.new
+game = Hangman.new("Lou")
+game.play
 

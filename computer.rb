@@ -2,11 +2,12 @@ require './common.rb'
 require './board.rb'
 
 class Computer
-  attr_reader :secret_word, :guess_state
+  attr_reader :secret_word, :correct_guesses, :incorrect_guesses
 
   def initialize
     @secret_word = nil
-    @guess_state = []
+    @correct_guesses = []
+    @incorrect_guesses = []
   end
 
   def gen_secret_word
@@ -18,26 +19,27 @@ class Computer
                               .sample
     File.close('./5desk.txt')
 
-    init_guess_state
+    init_correct_guesses
   end
 
   def letter_exists?(letter)
     @secret_word.include?(letter)
   end
 
-  def update_guess(letter)
+  def update_correct(letter)
     # replace '_' with letter for all matches/occurences
     @secret_word.split('').each_with_index do |s, i|
-      guess_state[i] = s if s == letter
+      @correct_guesses[i] = s if s == letter
     end
   end
 
-  def correct_guess
+  def update_incorrect(letter)
+    @incorrect_guesses << letter
   end
 
   private
-  def init_guess_state
-    @secret_word.length.to_i.times { @guess_state << '-' }
+  def init_correct_guesses
+    @secret_word.length.to_i.times { @correct_guesses << '_' }
   end
 end
 
