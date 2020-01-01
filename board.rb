@@ -1,20 +1,23 @@
-require './common'
+require_relative 'common.rb'
 
 class Board
-  attr_accessor :word, :correct, :incorrect
+  attr_accessor :word_length, :correct, :incorrect
 
   def initialize
-    @word = nil
-    @correct = nil
-    @incorrect = nil
-    @attempts = 6
+    @correct = []
+    @incorrect = []
+    @word_length = 0
   end
 
   def display
     system('clear')
 
-    print "correct guesses: "
-    p @correct
+    print "word: "
+    if correct.length == 0
+      @word_length.times { |i| print '_ ' }
+    else
+      @correct.each { |letter| print "#{letter} " }
+    end
     puts
 
     print "incorrect guesses: "
@@ -28,9 +31,5 @@ class Board
 
   def incorrect=(guesses)
     @incorrect = guesses
-  end
-
-  def update_stickman
-    @attempts = @attempts - 1
   end
 end

@@ -1,5 +1,4 @@
 require './common.rb'
-require './board.rb'
 
 class Computer
   attr_reader :secret_word, :correct_guesses, :incorrect_guesses
@@ -11,13 +10,14 @@ class Computer
   end
 
   def gen_secret_word
-    @dictionary = File.open('./5desk.txt', 'r')
+    dictionary = File.open('./5desk.txt', 'r')
     # read contents, newline delimited
-    @secret_word = @dictionary.readlines
+    @secret_word = dictionary.readlines
                               .map(&:chomp)
                               .select { |word| word.length >= 5 && word.length <= 12 }
                               .sample
-    File.close('./5desk.txt')
+                              .downcase
+    dictionary.close
 
     init_correct_guesses
   end
