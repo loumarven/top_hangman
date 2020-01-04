@@ -1,5 +1,3 @@
-require_relative 'common.rb'
-
 class Board
   attr_accessor :word_length, :correct, :incorrect
 
@@ -7,6 +5,7 @@ class Board
     @correct = []
     @incorrect = []
     @word_length = 0
+    @moves = 0
   end
 
   def display
@@ -23,6 +22,8 @@ class Board
     print "incorrect guesses: "
     p @incorrect
     puts
+
+    show_hangman(@incorrect.length)
   end
 
   def correct=(guesses)
@@ -31,5 +32,69 @@ class Board
 
   def incorrect=(guesses)
     @incorrect = guesses
+  end
+
+  private
+  def show_hangman(level)
+    hangman = [
+               '
+                +------+
+                |      |
+                       |
+                       |
+                       |
+                       |
+                    =======',
+               '
+                +------+
+                |      |
+                O      |
+                       |
+                       |
+                       |
+                    =======',
+               '
+                +------+
+                |      |
+                O      |
+                |      |
+                       |
+                       |
+                    =======',
+               '
+                +------+
+                |      |
+                O      |
+              / |      |
+                       |
+                       |
+                    =======',
+               '
+                +------+
+                |      |
+                O      |
+               /|\     |
+                       |
+                       |
+                    =======',
+               '
+                +------+
+                |      |
+                O      |
+               /|\     |
+               /       |
+                       |
+                    =======',
+               '
+                +------+
+                |      |
+                O      |
+               /|\     |
+               / \     |
+                       |
+                    ======='
+             ]
+
+    puts hangman[level]
   end
 end

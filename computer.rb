@@ -1,5 +1,3 @@
-require './common.rb'
-
 class Computer
   attr_reader :secret_word, :correct_guesses, :incorrect_guesses
 

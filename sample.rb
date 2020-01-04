@@ -1,6 +1,6 @@
 require './hangman'
 
 game = Hangman.new("Lou")
-game.play
+game.start
 puts "WINNER: #{game.winner}"
 
