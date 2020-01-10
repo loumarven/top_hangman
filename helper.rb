@@ -1,17 +1,18 @@
 module Helper
   COMPUTER = "COMPUTER"
   ATTEMPTS = 6
-  PLAY = 0
+  NEW_GAME = 0
   SAVE_QUIT = 1
   QUIT = 2
-  CONTINUE = 3
+  RESTORE = 3
+  GAME_FILE = ".prev_game.json"
 
   def show_options
     options = [
-               "Play",
+               "New Game",
                "Save and Quit",
                "Quit",
-               "Continue Game"
+               "Restore Game"
               ]
 
     options.each_with_index do |option, index|
@@ -33,5 +34,21 @@ module Helper
     end
 
     input.to_i
+  end
+
+  def prev_game_saved?
+    File.exist?(GAME_FILE)
+  end
+
+  def save_to_file(data)
+    File.open(GAME_FILE, 'w+') do |f|
+      Marshal.dump(data, f)
+    end
+  end
+
+  def load_from_file
+    File.open(GAME_FILE, 'r') do |f|
+      Marshal.load(f)
+    end
   end
 end
