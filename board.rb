@@ -11,6 +11,9 @@ class Board
   def display
     system('clear')
 
+    puts "Hangman Game"
+    show_hangman(@incorrect.length)
+
     print "word: "
     if correct.length == 0
       @word_length.times { |i| print '_ ' }
@@ -21,9 +24,6 @@ class Board
 
     print "incorrect guesses: "
     p @incorrect
-    puts
-
-    show_hangman(@incorrect.length)
   end
 
   def correct=(guesses)
@@ -96,5 +96,6 @@ class Board
              ]
 
     puts hangman[level]
+    puts
   end
 end

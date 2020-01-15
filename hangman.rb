@@ -3,7 +3,7 @@ TODO:
 1. Improve UI (add stickman) OK
 2. Add save game feature OK
 3. Do input checking OK
-4. Refactor/cleanup (move other methods to helper)
+4. Refactor/cleanup (move other methods to helper) OK
 =end
 
 require_relative 'game_data.rb'
@@ -24,18 +24,18 @@ class Hangman
     @board = nil
     @winner = nil
     @prev_game = nil
+    @game_state = NOT_PLAYING
   end
 
   def start
     @board.display
-    show_options
-    input = get_selected
-     
-    game_options(input)
+    show_options(@game_state)
+    input = get_input(@game_state)
+    do_action(input.to_i)
   end
 
   private
-  def game_options(input)
+  def do_action(input)
     case input
     when NEW_GAME
       new_game
@@ -56,6 +56,8 @@ class Hangman
     @computer = Computer.new
     @board = Board.new
 
+    delete_saved_game
+
     @computer.gen_secret_word
     @board.word_length = @computer.secret_word.length
 
@@ -63,10 +65,12 @@ class Hangman
   end
 
   def play
-    until game_over? do
+    @game_state = PLAYING
+
+    loop do
       @board.display
-      show_options
-      input = get_input
+      show_options(@game_state)
+      input = get_input(@game_state)
 
       if input.match(/[a-z]/)
         letter = input
@@ -79,8 +83,10 @@ class Hangman
           @board.incorrect = @computer.incorrect_guesses
           @player.attempts -= 1
         end
+
+        break if game_over?
       elsif input.match(/[0-3]/)
-        game_options(input.to_i)
+        do_action(input.to_i)
       end
     end
 
@@ -89,7 +95,7 @@ class Hangman
   end
 
   def save_quit
-    save_to_file(GameData.new(@player, @computer, @board, @winner))
+    save_game(GameData.new(@player, @computer, @board, @winner))
     puts "Game saved!"
 
     quit
@@ -101,7 +107,7 @@ class Hangman
   end
 
   def restore
-    load_from_file
+    load_saved_game
   end
 
   def continue
@@ -110,6 +116,7 @@ class Hangman
     @board = @prev_game.board
     @winner = @prev_game.winner
 
+    delete_saved_game
     play
   end
 
@@ -123,21 +130,5 @@ class Hangman
     else
       false
     end
-  end
-
-  def get_input
-    input = ''
-
-    loop do
-      puts "Enter guess letter or game option: "
-      input = gets.chomp
-      if input.match(/[0-3a-z]/)
-        break
-      else
-        puts "Invalid choice. Try again."
-      end
-    end
-
-    input
   end
 end
